@@ -8,17 +8,12 @@ database = mongo_client["Pondo2022Database"]
 
 politicians = database["Politicians"]
 
-bearer_token = "AAAAAAAAAAAAAAAAAAAAAHkpbQEAAAAAXkh8flIDh1RqTgQafNfh2%2FfLWmM%3D1MhVHAqS6n1Eqgy08KZ0VyISAWUwqLcnr0E6AlK7Inkfu8lp6H"
-consumer_key = "bkKiqZyBJtgebeNW1GYLmFxdi"
-consumer_secret = "Ii9C95BzDcf5KefTj92tzBzFNkXgWraaUjoTY3TQOmZuSWhltf"
-access_token = "928909452-r5zISsx7kBWsLkQQqUIYNos5bEhUSitS3BS8hyP4"
-access_token_secret = "i4f32wD2g0R4NECNqPY2QGXkbv7pZ1GTOfYT8szU8Yiho"
 
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret)
+auth = tweepy.OAuthHandler(api_key.consumer_key, api_key.consumer_secret)
+auth.set_access_token(api_key.access_token, api_key.access_token_secret)
 
 api = tweepy.API(auth)
-client = tweepy.Client(bearer_token)
+client = tweepy.Client(api_key.bearer_token)
 
 
 def grabProfilePic(username):
