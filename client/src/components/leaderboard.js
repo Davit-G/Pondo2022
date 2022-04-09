@@ -8,12 +8,12 @@ import Dan from "../assets/danandrews.jpeg"
 
 import axios from 'axios';
 
-function LeaderboardRow({ fName, lName, count, party }) {
+function LeaderboardRow({ fName, lName, count, party, profImage}) {
     return (
         <div style={{ borderStyle: "solid", borderWidth: "1px", borderRadius: "10px", padding: "6px", margin: "2px" }}> {/* deals with border width */}
             <Grid container direction={"row"} justifyContent={"space-between"} spacing={4} paddingX={4} paddingY={1}> {/* this is the flexbox */}
                 <Grid item xs>
-                    <img style={{ borderRadius: "10px", width: "200px", height: "200px", objectFit: "cover" }} src={Dan} alt="Dan andrews lol" />
+                    <img style={{ borderRadius: "10px", width: "200px", height: "200px", objectFit: "cover" }} src={profImage} alt="Dan andrews lol" />
                 </Grid>
                 <Grid item xs>
                     <Typography variant="h5">{fName} {lName}</Typography>
@@ -36,6 +36,8 @@ function Leaderboard({ backend_domain }) {
     const [leaderboard, updateLeaderboard] = useState([
         { name: "Daniel Andrews" },
     ])
+
+    
 
     useEffect(() => {
         axios.get(backend_domain + "/politicians").then((res) => {
@@ -100,11 +102,15 @@ function Leaderboard({ backend_domain }) {
                         return (reverseOrder) ? -1 : 1;
                     } else return 0;
                 }).map((candidate) => {
-                    return <LeaderboardRow party={candidate.party} fName={candidate.first} lName={candidate.last} count={candidate.haters}></LeaderboardRow>
+                    return <LeaderboardRow party={candidate.party}
+                    profImage={candidate.image}
+                    fName={candidate.first}
+                    lName={candidate.last}
+                    count={candidate.count}></LeaderboardRow>
                 })}
             </Stack>
         </>
     );
 }
 
-export default Leaderboard;
+export default React.memo(Leaderboard);

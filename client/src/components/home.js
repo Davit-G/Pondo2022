@@ -30,14 +30,14 @@ function Home({backend_domain}) {
                 {/* Each "grid item" element is like a child of the flexbox parent. xs just means share width equally */}
                 <Grid item xs>
                     <div style={{ backgroundColor: "black", height: "400px" }}>
-                        <img style={{ borderRadius: "10px", width: "100%", height: "400px", objectFit: "cover" }} src={Dan} alt="Dan andrews lol" />
+                        <img style={{ borderRadius: "10px", width: "100%", height: "400px", objectFit: "cover" }} src={competitors[0]["image"]} alt="Dan andrews lol" />
 
                     </div>
                     <Button style={{ marginTop: "12px" }} onClick={() => {handleClick(0)}} fullWidth variant="contained">This politician is bad</Button>
                 </Grid>
                 <Grid item xs>
                     <div style={{ backgroundColor: "black", height: "400px" }}>
-                        <img style={{ borderRadius: "10px", width: "100%", height: "400px", objectFit: "cover" }} src={Dan} alt="Dan andrews lol" />
+                        <img style={{ borderRadius: "10px", width: "100%", height: "400px", objectFit: "cover" }} src={competitors[1]["image"]} alt="Dan andrews lol" />
 
                     </div>
                     <Button style={{ marginTop: "12px" }} onClick={() => {handleClick(1)}} fullWidth variant="contained">This politician is worse</Button>
