@@ -28,7 +28,7 @@ function LeaderboardRow({ name, count }) {
 
 function Leaderboard({ }) {
 
-    const sampleData = [
+    const [leaderboard, updateLeaderboard] = useState([
         { name: "Daniel Andrews", haters: 256000 },
         { name: "Scott Morrison idk", haters: 24000000 },
         { name: "Daniel Andrews Jr", haters: 5 },
@@ -46,7 +46,10 @@ function Leaderboard({ }) {
         { name: "Daniel Andrews", haters: 256000 },
         { name: "Scott Morrison idk", haters: 24000000 },
         { name: "Daniel Andrews Jr", haters: 5 },
-    ]
+    ])
+
+    const [filterBy, updateFilterBy] = useState("haters")  //change this to whatever key you want to filter in the response data
+    const [reverseOrder, updateReverseOrder] = useState(true)
 
     return (<>
         <Grid container direction={"row"} justifyContent={"space-between"} paddingX={4} spacing={4}>
@@ -57,7 +60,13 @@ function Leaderboard({ }) {
         </Grid>
         <Stack style={{ maxHeight: '70vh', overflow: 'auto' }}>
 
-            {sampleData.map((candidate) => {
+            {leaderboard.sort((a, b) => { //this is the shit that "filters" the candidates based on whatever metric we want
+                if (a[filterBy] < b[filterBy]) {
+                    return (reverseOrder) ? 1 : -1; //confusing but all it does is flip the sort order of items if "reverseorder" is true
+                } else if (a[filterBy] > b[filterBy]) {
+                    return (reverseOrder) ? -1 : 1;
+                } else return 0;
+            }).map((candidate) => {
                 return <LeaderboardRow name={candidate.name} count={candidate.haters}></LeaderboardRow>
             })}
         </Stack>
