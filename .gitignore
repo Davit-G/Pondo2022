@@ -31,3 +31,4 @@ yarn-error.log*
 # serverside
 server/env
 __pycache__
+/server/api_key.py
