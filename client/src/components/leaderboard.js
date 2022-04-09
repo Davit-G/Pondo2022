@@ -8,22 +8,22 @@ import Dan from "../assets/danandrews.jpeg"
 
 import axios from 'axios';
 
-function LeaderboardRow({ fName, lName, count, party, profImage}) {
+function LeaderboardRow({ fName, lName, count, party, profImage, index }) {
     return (
         <div style={{ borderStyle: "solid", borderWidth: "1px", borderRadius: "10px", padding: "6px", margin: "2px" }}> {/* deals with border width */}
             <Grid container direction={"row"} justifyContent={"space-between"} spacing={4} paddingX={4} paddingY={1}> {/* this is the flexbox */}
+                <Grid item>
+                    <Typography variant="h3">{index + 1}#</Typography>
+                </Grid>
                 <Grid item xs>
-                    <img style={{ borderRadius: "10px", width: "200px", height: "200px", objectFit: "cover" }} src={profImage} alt="Dan andrews lol" />
+                    <img style={{ borderRadius: "10px", width: "150px", height: "150px", objectFit: "cover" }} src={profImage} alt="Dan andrews lol" />
                 </Grid>
                 <Grid item xs>
                     <Typography variant="h5">{fName} {lName}</Typography>
                     <Typography variant="h6" color="gray">{party}</Typography>
                 </Grid>
                 <Grid item xs>
-                    <Typography variant="h6">{count}</Typography>
-                </Grid>
-                <Grid item xs>
-                    <Typography variant="h6">idk lol</Typography>
+                    <Typography variant="h6">{count} {count == 1 ? "vote" : "votes"} against this candidate</Typography>
                 </Grid>
             </Grid>
         </div>
@@ -37,28 +37,37 @@ function Leaderboard({ backend_domain }) {
         { name: "Daniel Andrews" },
     ])
 
-    
+
 
     useEffect(() => {
         axios.get(backend_domain + "/politicians").then((res) => {
             console.log(res.data.data)
-            updateLeaderboard(res.data.data)
+            let sortedResponse = res.data.data.sort((a, b) => { // sort by count so that we can add the number next to the thing
+                if (a["count"] < b["count"]) {
+                    return 1;
+                } else if (a["count"] > b["count"]) {
+                    return -1;
+                } else return 0;
+            }).map((item, i) => {
+                return { ...item, "position": i }
+            })
+            updateLeaderboard(sortedResponse)
         })
     }, [])
 
-    const [filterBy, updateFilterBy] = useState("first")  //change this to whatever key you want to filter in the response data
+    const [filterBy, updateFilterBy] = useState("count")  //change this to whatever key you want to filter in the response data
     const [reverseOrder, updateReverseOrder] = useState(false)
 
     return (
         <>
             {/* Title of the page */}
-            <Typography pb={4} variant="h2" align="center">Leaderboards</Typography>
-
+            <Typography variant="h2" align="left">Leaderboards</Typography>
+            <Typography variant="h5" color={"gray"} align="left">How many policy members' voting decisions were worse than others?</Typography>
             {/* Filtering and Sorting options */}
 
 
 
-            <Grid container direction={"row"} justifyContent={"space-between"} paddingX={4} spacing={4}>
+            <Grid container direction={"row"} alignItems={"center"} justifyContent={"flex-end"} paddingX={4} spacing={4}>
                 <Grid item>
                     <Typography>Sort By:</Typography>
                 </Grid>
@@ -72,11 +81,10 @@ function Leaderboard({ backend_domain }) {
                             label="Age"
                             onChange={(event) => updateFilterBy(String(event.target.value))}
                         >
+                            <MenuItem value={"count"}>Count</MenuItem>
                             <MenuItem value={"first"}>First Name</MenuItem>
                             <MenuItem value={"last"}>Last Name</MenuItem>
-                            <MenuItem value={"count"}>Count</MenuItem>
                             <MenuItem value={"party"}>Party</MenuItem>
-                            <MenuItem value={"followers"}>Twitter Followers</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
@@ -87,30 +95,42 @@ function Leaderboard({ backend_domain }) {
 
 
 
-            <Grid container direction={"row"} justifyContent={"space-between"} paddingX={4} spacing={4}>
+            {/* <Grid container direction={"row"} justifyContent={"space-between"} paddingX={4} spacing={4}>
                 <Grid item xs><p>Candidate Photo</p></Grid>
                 <Grid item xs><p>Candidate Name</p></Grid>
                 <Grid item xs><p>Count</p></Grid>
                 <Grid item xs><p></p></Grid>
-            </Grid>
-            <Stack style={{ maxHeight: '70vh', overflow: 'auto' }}>
+            </Grid> */}
+            <Stack style={{  overflow: 'auto' }}>
 
                 {leaderboard.sort((a, b) => { //this is the shit that "filters" the candidates based on whatever metric we want
-                    if (a[filterBy] < b[filterBy]) {
-                        return (reverseOrder) ? 1 : -1; //confusing but all it does is flip the sort order of items if "reverseorder" is true
-                    } else if (a[filterBy] > b[filterBy]) {
-                        return (reverseOrder) ? -1 : 1;
-                    } else return 0;
+                    if (filterBy === "count") {  //i need this shit or else it sorts backwards
+                        if (a["position"] < b["position"]) {
+                            return (reverseOrder) ? 1 : -1; //confusing but all it does is flip the sort order of items if "reverseorder" is true
+                        } else if (a["position"] > b["position"]) {
+                            return (reverseOrder) ? -1 : 1;
+                        } else return 0;
+                    } else {
+                        if (a[filterBy] < b[filterBy]) {
+                            return (reverseOrder) ? 1 : -1; //confusing but all it does is flip the sort order of items if "reverseorder" is true
+                        } else if (a[filterBy] > b[filterBy]) {
+                            return (reverseOrder) ? -1 : 1;
+                        } else return 0;
+                    }
+
+
                 }).map((candidate) => {
-                    return <LeaderboardRow party={candidate.party}
-                    profImage={candidate.image}
-                    fName={candidate.first}
-                    lName={candidate.last}
-                    count={candidate.count}></LeaderboardRow>
+                    return <LeaderboardRow
+                        index={candidate.position}
+                        party={candidate.party}
+                        profImage={candidate.image}
+                        fName={candidate.first}
+                        lName={candidate.last}
+                        count={candidate.count}></LeaderboardRow>
                 })}
             </Stack>
         </>
     );
 }
 
-export default React.memo(Leaderboard);
+export default Leaderboard;
