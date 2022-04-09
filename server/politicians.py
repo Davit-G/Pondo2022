@@ -8,10 +8,6 @@ Then, twitter handles grabbed and pushed onto mongodb.
 
 
 """
-
-
-
-
 import api_key
 
 import pymongo
@@ -26,9 +22,6 @@ mongo_client = pymongo.MongoClient(api_key.MONGO_STRING)
 database = mongo_client["Pondo2022Database"]
 
 politicians = database["Politicians"]
-
-
-
 
 def get_all_names():
     """ gets a list of all politicians

@@ -1,7 +1,8 @@
 from random import random
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from models.models import Vote
 
 app = FastAPI()
 
@@ -47,7 +48,8 @@ async def politician_list():
             "_id": 0,
             "party": 1,
             "person_id": 1,
-            "count": 1
+            "count": 1,
+            "image": 1
         }))
     return {"data": pol_list}
 
@@ -70,3 +72,26 @@ async def politician_list():
 async def get_parties():
     found_parties = list(parties.find({}))
     return found_parties
+    
+
+@app.post('/vote/')
+async def vote(usr_vote: Vote):
+    better_id = usr_vote.better_politician_id
+    worse_id = usr_vote.worse_politician_id
+
+    # add one to counter of worse politician
+    if politicians.find_one({'person_id': better_id}) is None:
+        return HTTPException(status_code=404, detail='a politician was not found')
+    if politicians.find_one({'person_id': worse_id}) is None:
+        return HTTPException(status_code=404, detail='a politician was not found')
+    
+    worse_politician = politicians.find_one({ 'person_id': better_id })
+    if 'count' in worse_politician:
+        politicians.update({'person_id': worse_id}, {'$set': { 'count': 1 }})
+    else:
+        politicians.update({'person_id': worse_id}, {'$set': { 'count': worse_politician['count'] + 1 }})
+
+    return []
+
+
+# endpoint which gives all parties
