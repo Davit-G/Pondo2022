@@ -1,3 +1,1 @@
 # API Documentation
-
-## Planned Endpoints
