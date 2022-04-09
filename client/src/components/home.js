@@ -4,15 +4,21 @@ import { Grid, Button, Typography } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
 import Dan from "../assets/danandrews.jpeg"
+import axios from 'axios';
 
-function Home({ }) {
+function Home({backend_domain}) {
+
+    const [competitors, updateCompetitors] = useState([{}, {}])
 
     useEffect(() => {
         // make the request for data here
-    })
+        axios.get(backend_domain + "/random_politicians").then((res) => {
+            updateCompetitors(res.data)
+            console.log(res.data)
+        })
+    }, []) //add this double slash BS so that it doesnt infinity loop itself out of existence
 
     return (
-
         <div>
             <Typography pb={4} variant="h3" align="center">Vote for the worst parliament member of these two</Typography>
             {/*  So this container is a parent flexbox component that wraps everything */}
