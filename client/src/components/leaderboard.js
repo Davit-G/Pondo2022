@@ -2,6 +2,8 @@ import { Grid, Stack, Box } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { Typography } from '@mui/material';
 
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+
 import Dan from "../assets/danandrews.jpeg"
 
 function LeaderboardRow({ name, count }) {
@@ -53,7 +55,33 @@ function Leaderboard({ }) {
 
     return (
         <>
+            {/* Title of the page */}
             <Typography pb={4} variant="h2" align="center">Leaderboards</Typography>
+
+            {/* Filtering and Sorting options */}
+            <Grid container direction={"row"} justifyContent={"space-between"} paddingX={4} spacing={4}>
+                <Grid item>
+                    <Typography>Sort By:</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Sort Category</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={filterBy}
+                            label="Age"
+                            onChange={(event) => updateFilterBy(String(event.target.value))}
+                        >
+                            <MenuItem value={"name"}>Name</MenuItem>
+                            <MenuItem value={"haters"}>Count</MenuItem>
+                            <MenuItem value={"party"}>Party</MenuItem>
+                            <MenuItem value={"followers"}>Twitter Followers</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+            </Grid>
+
             <Grid container direction={"row"} justifyContent={"space-between"} paddingX={4} spacing={4}>
                 <Grid item xs><p>Candidate Photo</p></Grid>
                 <Grid item xs><p>Candidate Name</p></Grid>
