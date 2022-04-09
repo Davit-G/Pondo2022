@@ -27,3 +27,6 @@ yarn-error.log*
 /client/.vscode
 /server/.vscode
 .vscode
+
+# serverside
+server/env
