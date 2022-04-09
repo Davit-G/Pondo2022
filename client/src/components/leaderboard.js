@@ -8,7 +8,7 @@ import Dan from "../assets/danandrews.jpeg"
 
 import axios from 'axios';
 
-function LeaderboardRow({ fName, lName, count }) {
+function LeaderboardRow({ fName, lName, count, party }) {
     return (
         <div style={{ borderStyle: "solid", borderWidth: "1px", borderRadius: "10px", padding: "6px", margin: "2px" }}> {/* deals with border width */}
             <Grid container direction={"row"} justifyContent={"space-between"} spacing={4} paddingX={4} paddingY={1}> {/* this is the flexbox */}
@@ -17,6 +17,7 @@ function LeaderboardRow({ fName, lName, count }) {
                 </Grid>
                 <Grid item xs>
                     <Typography variant="h6">{fName} {lName}</Typography>
+                    <Typography variant="h6">{party}</Typography>
                 </Grid>
                 <Grid item xs>
                     <Typography variant="h6">{count}</Typography>
@@ -91,7 +92,7 @@ function Leaderboard({ backend_domain }) {
                         return (reverseOrder) ? -1 : 1;
                     } else return 0;
                 }).map((candidate) => {
-                    return <LeaderboardRow fName={candidate.first} lName={candidate.last} count={candidate.haters}></LeaderboardRow>
+                    return <LeaderboardRow party={candidate.party} fName={candidate.first} lName={candidate.last} count={candidate.haters}></LeaderboardRow>
                 })}
             </Stack>
         </>
