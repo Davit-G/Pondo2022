@@ -1,3 +1,17 @@
+
+"""
+DONT TOUCH
+
+This was used to get data from open australia API about all politicians of Australia
+
+Then, twitter handles grabbed and pushed onto mongodb.
+
+
+"""
+
+
+
+
 import api_key
 
 import pymongo
@@ -39,7 +53,7 @@ def get_all_names():
 
 def get_twitter_handle(query):
     search_response = requests.get(f"https://www.google.com/search?q={query}&start=0").content
-    # print(query)
+    print(query)
     document = BeautifulSoup(search_response, "html.parser").find_all("a")
     handle = ""
     for i in range(0, 30):
@@ -53,5 +67,12 @@ def get_twitter_handle(query):
         handle = handle.split("&")[0]
     if "/" in handle:
         handle = handle.split("/")[0]
-    # print(handle)
+    print(handle)
     return handle
+
+response = get_all_names()
+
+for politic_man in response:
+    politicians.update_one({"person_id": politic_man["person_id"]}, {"$set": politic_man}, upsert=True) # Adds politician to DB otherwise doesnt change anything
+
+print("Added all politicians from openAustralia")
