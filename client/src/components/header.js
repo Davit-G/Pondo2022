@@ -8,21 +8,20 @@ import { Link as StyledLink } from "@mui/material" //the styling from MUI
 
 function NavBarLink({ to, children }) {
     return (
-        <Grid margin={4}>
-            <StyledLink component={Link} underline="hover" variant="h5" to={to}>{children}</StyledLink>
+        <Grid marginX={4} marginY={2}>
+            <StyledLink component={Link} underline="hover" variant="h6" to={to}>{children}</StyledLink>
         </Grid>
     );
 }
 
 function Header({ }) {
     return (
-        <div style={{ padding: "12px" }}>
+        <div style={{ padding: "4px" }}>
             <Grid container justifyContent={"center"} spacing={4}>
                 <NavBarLink to="/">Home</NavBarLink>
                 <NavBarLink to="leaderboard">Leaderboards</NavBarLink>
                 <NavBarLink to="stats">Statistics</NavBarLink>
-                <NavBarLink to="login">Login</NavBarLink>
-                <NavBarLink to="?">?</NavBarLink>
+                <NavBarLink to="about">About</NavBarLink>
             </Grid>
 
         </div>

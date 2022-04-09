@@ -22,7 +22,7 @@ function App() {
 
                         <Routes>
                             <Route path="/" element={<Home backend_domain={backend_domain}></Home>} />
-                            <Route path="leaderboard" element={<Leaderboard backend_domain={backend_domain}></Leaderboard>} />
+                            <Route path="leaderboard" element={<Leaderboard backend_domain={backend_domain} query={"/politicians"}></Leaderboard>} />
                             <Route path="stats" element={ <Stats backend_domain={backend_domain}></Stats>} />
                         </Routes>
 

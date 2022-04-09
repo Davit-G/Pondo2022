@@ -1,18 +1,20 @@
 from random import random
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+from models.models import Vote
+from pathlib import Path
 
 app = FastAPI()
 
 
 origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
+    "http://103.1.185.148",
+    "http://103.1.185.148:8000",
     "http://localhost",
+    "http://localhost:3000",
     "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "http://127.0.0.1:*"
 ]
 
 app.add_middleware(
@@ -30,11 +32,8 @@ mongo_client = pymongo.MongoClient(api_key.MONGO_STRING)
 database = mongo_client["Pondo2022Database"]
 politicians = database["Politicians"]
 tweets = database["Tweets"]
-
-@app.get('/')
-async def root():
-    return "<h1>something</h1>"
-
+parties = database["Parties"]
+policies = database["Policies"]
 
 @app.get('/politicians')
 async def politician_list():
@@ -46,7 +45,10 @@ async def politician_list():
             "_id": 0,
             "party": 1,
             "person_id": 1,
-            "count": 1
+            "count": 1,
+            "image": 1,
+            "house": 1,
+            "roles": 1
         }))
     return {"data": pol_list}
 
@@ -63,3 +65,51 @@ async def politician_list():
     del random_politicians[0]["_id"]
     del random_politicians[1]["_id"]
     return {"data": random_politicians}
+
+
+@app.get('/parties')
+async def get_parties():
+    found_parties = list(parties.find({}))
+    return found_parties
+
+@app.get('/worstfromparties')
+async def get_parties():
+    worst_politicians = []
+    for party in parties.find({}):
+        worst_from_party = politicians.find({"party": party["name"]}).sort("count", -1)[0]
+        del worst_from_party["_id"]
+        worst_politicians.append( worst_from_party )
+    return {"data": worst_politicians}
+
+
+@app.get('/random_policy')
+async def random_policy():
+    random_policy2 = list(policies.aggregate([{ # aggregate lets us use the sample function in mongodb which gets random documents
+        "$sample": {
+            "size": 1
+        }
+    }]))
+
+    del random_policy2[0]["_id"]
+    return {"data": random_policy2}
+
+
+@app.post('/vote/')
+async def vote(usr_vote: Vote):
+    better_id = usr_vote.better_politician_id
+    worse_id = usr_vote.worse_politician_id
+
+    # add one to counter of worse politician
+    if politicians.find_one({'person_id': better_id}) is None:
+        return HTTPException(status_code=404, detail='a politician was not found')
+    if politicians.find_one({'person_id': worse_id}) is None:
+        return HTTPException(status_code=404, detail='a politician was not found')
+    
+    worse_politician = politicians.find_one({ 'person_id': better_id })
+    if 'count' not in worse_politician:
+        politicians.update_one({'_id': worse_politician['_id']}, {'$set': { 'count': 1 }})
+    else:
+        politicians.update_one({'_id': worse_politician['_id']}, {'$set': { 'count': worse_politician['count'] + 1 }})
+
+
+# endpoint which gives all parties
