@@ -2,10 +2,15 @@ import { Grid, Stack, Box } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { Typography } from '@mui/material';
 
+import Dan from "../assets/danandrews.jpeg"
+
 function LeaderboardRow({ name, count }) {
     return (
-        <div style={{ borderStyle: "solid", borderWidth: "1px", borderRadius: "10px",  padding: "6px", margin: "2px" }}>
-            <Grid container direction={"row"} justifyContent={"space-between"} paddingX={4} paddingY={1}>
+        <div style={{ borderStyle: "solid", borderWidth: "1px", borderRadius: "10px",  padding: "6px", margin: "2px" }}> {/* deals with border width */}
+            <Grid container direction={"row"} justifyContent={"space-between"} spacing={4} paddingX={4} paddingY={1}> {/* this is the flexbox */}
+                <Grid item xs>
+                    <img style={{borderRadius: "10px", width: "200px", height: "200px", objectFit: "cover"}} src={Dan} alt="Dan andrews lol" />
+                </Grid>
                 <Grid item xs>
                     <Typography variant="h6">{name}</Typography>
                 </Grid>
@@ -44,7 +49,8 @@ function Leaderboard({ }) {
     ]
 
     return (<>
-        <Grid container direction={"row"} justifyContent={"space-between"} paddingX={4}>
+        <Grid container direction={"row"} justifyContent={"space-between"} paddingX={4} spacing={4}>
+        <Grid item xs><p>Candidate Photo</p></Grid>
             <Grid item xs><p>Candidate Name</p></Grid>
             <Grid item xs><p>Count</p></Grid>
             <Grid item xs><p></p></Grid>
