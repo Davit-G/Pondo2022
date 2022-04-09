@@ -2,7 +2,9 @@ from random import random
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from models.models import Vote
+from pathlib import Path
 
 app = FastAPI()
 
@@ -32,11 +34,6 @@ database = mongo_client["Pondo2022Database"]
 politicians = database["Politicians"]
 tweets = database["Tweets"]
 parties = database["Parties"]
-
-@app.get('/')
-async def root():
-    return "<h1>something</h1>"
-
 
 @app.get('/politicians')
 async def politician_list():
