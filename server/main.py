@@ -10,12 +10,11 @@ app = FastAPI()
 
 
 origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
+    "http://103.1.185.148",
+    "http://103.1.185.148:8000",
     "http://localhost",
+    "http://localhost:3000",
     "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "http://127.0.0.1:*"
 ]
 
 app.add_middleware(
