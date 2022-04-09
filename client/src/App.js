@@ -9,6 +9,7 @@ import Header from './components/header';
 import Home from './components/home';
 import Leaderboard from './components/leaderboard';
 
+const backend_domain = "http://127.0.0.1:8000"
 
 function App() {
     return (
@@ -19,8 +20,8 @@ function App() {
                         <Header></Header>
 
                         <Routes>
-                            <Route path="/" element={<Home></Home>} />
-                            <Route path="leaderboard" element={<Leaderboard></Leaderboard>} />
+                            <Route path="/" element={<Home backend_domain={backend_domain}></Home>} />
+                            <Route path="leaderboard" element={<Leaderboard backend_domain={backend_domain}></Leaderboard>} />
                         </Routes>
 
                         {/*  main stuff */}
