@@ -17,7 +17,7 @@ def grabTweets():
 
         # do your stuff here
 
-        tweets.append("""     in here you put a tweet or some tweets idfk just end up making it one array in the end       """)
+        tweets.append("""     in here you  put a tweet or some tweets idfk just end up making it one array in the end       """)
     return tweets
 
 long_list_of_tweets = grabTweets()
