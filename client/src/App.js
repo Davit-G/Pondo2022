@@ -8,6 +8,7 @@ import { Route, BrowserRouter, Routes, Outlet } from 'react-router-dom';
 import Header from './components/header';
 import Home from './components/home';
 import Leaderboard from './components/leaderboard';
+import Stats from './components/stats';
 
 const backend_domain = "http://127.0.0.1:8000"
 
@@ -22,6 +23,7 @@ function App() {
                         <Routes>
                             <Route path="/" element={<Home backend_domain={backend_domain}></Home>} />
                             <Route path="leaderboard" element={<Leaderboard backend_domain={backend_domain}></Leaderboard>} />
+                            <Route path="stats" element={ <Stats backend_domain={backend_domain}></Stats>} />
                         </Routes>
 
                         {/*  main stuff */}

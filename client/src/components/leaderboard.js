@@ -1,4 +1,4 @@
-import { Grid, Stack, Box } from '@mui/material';
+import { Grid, Stack, Box, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { Typography } from '@mui/material';
 
@@ -16,8 +16,8 @@ function LeaderboardRow({ fName, lName, count, party }) {
                     <img style={{ borderRadius: "10px", width: "200px", height: "200px", objectFit: "cover" }} src={Dan} alt="Dan andrews lol" />
                 </Grid>
                 <Grid item xs>
-                    <Typography variant="h6">{fName} {lName}</Typography>
-                    <Typography variant="h6">{party}</Typography>
+                    <Typography variant="h5">{fName} {lName}</Typography>
+                    <Typography variant="h6" color="gray">{party}</Typography>
                 </Grid>
                 <Grid item xs>
                     <Typography variant="h6">{count}</Typography>
@@ -41,12 +41,11 @@ function Leaderboard({ backend_domain }) {
         axios.get(backend_domain + "/politicians").then((res) => {
             console.log(res.data.data)
             updateLeaderboard(res.data.data)
-            
         })
     }, [])
 
-    const [filterBy, updateFilterBy] = useState("haters")  //change this to whatever key you want to filter in the response data
-    const [reverseOrder, updateReverseOrder] = useState(true)
+    const [filterBy, updateFilterBy] = useState("first")  //change this to whatever key you want to filter in the response data
+    const [reverseOrder, updateReverseOrder] = useState(false)
 
     return (
         <>
@@ -54,6 +53,9 @@ function Leaderboard({ backend_domain }) {
             <Typography pb={4} variant="h2" align="center">Leaderboards</Typography>
 
             {/* Filtering and Sorting options */}
+
+
+
             <Grid container direction={"row"} justifyContent={"space-between"} paddingX={4} spacing={4}>
                 <Grid item>
                     <Typography>Sort By:</Typography>
@@ -68,14 +70,20 @@ function Leaderboard({ backend_domain }) {
                             label="Age"
                             onChange={(event) => updateFilterBy(String(event.target.value))}
                         >
-                            <MenuItem value={"name"}>Name</MenuItem>
-                            <MenuItem value={"haters"}>Count</MenuItem>
+                            <MenuItem value={"first"}>First Name</MenuItem>
+                            <MenuItem value={"last"}>Last Name</MenuItem>
+                            <MenuItem value={"count"}>Count</MenuItem>
                             <MenuItem value={"party"}>Party</MenuItem>
                             <MenuItem value={"followers"}>Twitter Followers</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
+                <Grid item>
+                    <FormControlLabel control={<Checkbox checked={reverseOrder} inputProps={{ 'aria-label': 'controlled' }} onChange={(event) => updateReverseOrder(event.target.checked)} />} label="Reverse Order" />
+                </Grid>
             </Grid>
+
+
 
             <Grid container direction={"row"} justifyContent={"space-between"} paddingX={4} spacing={4}>
                 <Grid item xs><p>Candidate Photo</p></Grid>
