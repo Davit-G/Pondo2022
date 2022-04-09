@@ -12,7 +12,7 @@ policiesdb = database["Policies"]
 KEY = api_key.tvfy_key
 
 def get_all_policy_comparisons():
-    policies = []
+    policies = {}
     for politician in politicians.find({}):
         id = politician["person_id"]
         
@@ -22,8 +22,9 @@ def get_all_policy_comparisons():
         pol_list = []
         for policy in response["policy_comparisons"]:
             item = {}
+            
             item["policyName"] = policy["policy"]["name"]
-            item["policyDesc"] = policy["policy"]["description"]
+            item["policyDesc"] = policy["policy"]["description"]  # also add ID  AAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
             item["agreement"] = policy["agreement"]
             item["voted"] = policy["voted"]
             
@@ -35,9 +36,52 @@ def get_all_policy_comparisons():
         print(f"queried {politician['first']} politician{'last'}")
     return policies
 
-a = get_all_policy_comparisons()
+def get_all_policy_comparisons2():
+    policies = []
+    for politician in politicians.find({}):
+        person_id = politician["person_id"]
+
+        response = requests.get(f"https://theyvoteforyou.org.au/api/v1/people/{person_id}.json?key={KEY}").json()
+
+        for policy in response["policy_comparisons"]:
+
+            for index, existing_policy in enumerate(policies):
+                if existing_policy["id"] == policy["policy"]["id"]:
+                    # update dict we already have with the politician we are looking at at the current moment in time lmao
+                    policies[index]["participants"].append({
+                        "person_id": person_id,
+                        "agreement": policy["agreement"],
+                        "voted": policy["voted"]
+                    })
+                    break
+            else:
+                policies.append({
+                    "id": policy["policy"]["id"],
+                    "policyName": policy["policy"]["name"],
+                    "policyDesc": policy["policy"]["description"],
+                    "participants": [{
+                        "person_id": person_id,
+                        "agreement": policy["agreement"],
+                        "voted": policy["voted"]
+                    }]
+                })
+        print(politician["first"], politician["last"])
+    return policies
+
+
+a = get_all_policy_comparisons2()
 
 for x in a:
-    policiesdb.update_one({"person_id": x["person_id"]}, {"$set": x}, upsert=True)
+    policiesdb.update_one({"id": x["id"]}, {"$set": x}, upsert=True)
 
 print("Done")
+
+
+
+
+# {
+#     "policy_id": 2095,
+#     "policyName": "A Thing That Taxes The Rich",
+#     "policyDesc": "sigouhsohdg",
+#     "voters": [users etc]
+# }
