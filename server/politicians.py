@@ -1,10 +1,20 @@
 import api_key
+
+import pymongo
 from openaustralia import OpenAustralia
 from bs4 import BeautifulSoup
 import requests
 
 KEY = api_key.OA_KEY
 api_client = OpenAustralia(KEY)
+
+mongo_client = pymongo.MongoClient(api_key.MONGO_STRING)
+database = mongo_client["Pondo2022Database"]
+
+politicians = database["Politicians"]
+
+
+
 
 def get_all_names():
     """ gets a list of all politicians
