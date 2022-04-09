@@ -1,6 +1,6 @@
 beautifulsoup4==4.11.1
 fastapi==0.75.1
-newsapi==0.1.1
+newsapi-python==0.2.6
 openaustralia==1.0.1
 pymongo==4.1.0
 requests==2.27.0
