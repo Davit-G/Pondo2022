@@ -8,8 +8,8 @@ import { Link as StyledLink } from "@mui/material" //the styling from MUI
 
 function NavBarLink({ to, children }) {
     return (
-        <Grid margin={2}>
-            <StyledLink component={Link} to={to}>{children}</StyledLink>
+        <Grid margin={4}>
+            <StyledLink component={Link} underline="hover" variant="h5" to={to}>{children}</StyledLink>
         </Grid>
     );
 }

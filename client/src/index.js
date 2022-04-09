@@ -21,7 +21,14 @@ function ThemeWrapper({ }) {
             createTheme({
                 palette: {
                     mode: prefersDarkMode ? 'dark' : 'light',
-                },
+                    ...(!prefersDarkMode) ? {
+                        link: {
+                            primary: "white" 
+                        }
+                    } : {
+
+                    }
+                }
             }),
         [prefersDarkMode],
     );

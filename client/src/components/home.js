@@ -11,13 +11,10 @@ function Home({ }) {
         // make the request for data here
     })
 
-
-
-
     return (
 
         <div>
-            <Typography pb={4} variant="h2" align="center">According to this, which parliament member is worse</Typography>
+            <Typography pb={4} variant="h3" align="center">Vote for the worst parliament member of these two</Typography>
             {/*  So this container is a parent flexbox component that wraps everything */}
             <Grid container spacing={2} direction={"row"} justifyContent={"space-around"}>
                 {/* Each "grid item" element is like a child of the flexbox parent. xs just means share width equally */}
