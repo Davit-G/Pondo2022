@@ -30,6 +30,7 @@ mongo_client = pymongo.MongoClient(api_key.MONGO_STRING)
 database = mongo_client["Pondo2022Database"]
 politicians = database["Politicians"]
 tweets = database["Tweets"]
+parties = database["Parties"]
 
 @app.get('/')
 async def root():
@@ -63,3 +64,9 @@ async def politician_list():
     del random_politicians[0]["_id"]
     del random_politicians[1]["_id"]
     return {"data": random_politicians}
+
+
+@app.get('/parties')
+async def get_parties():
+    found_parties = list(parties.find({}))
+    return found_parties
