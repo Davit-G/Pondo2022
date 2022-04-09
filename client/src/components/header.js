@@ -20,6 +20,7 @@ function Header({ }) {
             <Grid container justifyContent={"center"} spacing={4}>
                 <NavBarLink to="/">Home</NavBarLink>
                 <NavBarLink to="leaderboard">Leaderboards</NavBarLink>
+                <NavBarLink to="stats">Statistics</NavBarLink>
                 <NavBarLink to="login">Login</NavBarLink>
                 <NavBarLink to="?">?</NavBarLink>
             </Grid>
