@@ -25,7 +25,7 @@ def grabProfilePic(username):
     user = client.get_user(username=username, user_fields=["profile_image_url"])
 
     # prints username, id and pfp
-    return(user.data.profile_image_url)
+    return(user.data.profile_image_url.replace("_normal", ""))
 
 def grabTweets(username): 
     """
@@ -74,10 +74,15 @@ for politician in politicians.find({}):
     twitter_handle = politician["twitter"]
     print(twitter_handle)
 
-    # do your stuff here
-    new_tweets = tweet_data(grabTweets(twitter_handle), politician["person_id"])
-    for newTweet in new_tweets:
-        tweets.update_one({"tweet_id": newTweet["tweet_id"]}, {"$set": newTweet}, upsert=True)
+    # # do your stuff here
+    # new_tweets = tweet_data(grabTweets(twitter_handle), politician["person_id"])
+    # for newTweet in new_tweets:
+    #     tweets.update_one({"tweet_id": newTweet["tweet_id"]}, {"$set": newTweet}, upsert=True)
+    try:
+        prof_image = grabProfilePic(twitter_handle)
+    except Exception as e:
+        print(e)
+    politicians.update_one({"person_id": politician["person_id"]}, {"$set": {"image": prof_image}}, upsert=True)
 
 
 print("Done")

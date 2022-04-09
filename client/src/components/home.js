@@ -13,10 +13,14 @@ function Home({backend_domain}) {
     useEffect(() => {
         // make the request for data here
         axios.get(backend_domain + "/random_politicians").then((res) => {
-            updateCompetitors(res.data)
-            console.log(res.data)
+            updateCompetitors(res.data.data)
+            console.log(res.data.data)
         })
     }, []) //add this double slash BS so that it doesnt infinity loop itself out of existence
+
+    function handleClick(index) {
+        console.log(index) //handle a vote, do post request here
+    }
 
     return (
         <div>
@@ -29,14 +33,14 @@ function Home({backend_domain}) {
                         <img style={{ borderRadius: "10px", width: "100%", height: "400px", objectFit: "cover" }} src={Dan} alt="Dan andrews lol" />
 
                     </div>
-                    <Button style={{ marginTop: "12px" }} fullWidth variant="contained">This politician is bad</Button>
+                    <Button style={{ marginTop: "12px" }} onClick={() => {handleClick(0)}} fullWidth variant="contained">This politician is bad</Button>
                 </Grid>
                 <Grid item xs>
                     <div style={{ backgroundColor: "black", height: "400px" }}>
                         <img style={{ borderRadius: "10px", width: "100%", height: "400px", objectFit: "cover" }} src={Dan} alt="Dan andrews lol" />
 
                     </div>
-                    <Button style={{ marginTop: "12px" }} fullWidth variant="contained">This politician is worse</Button>
+                    <Button style={{ marginTop: "12px" }} onClick={() => {handleClick(1)}} fullWidth variant="contained">This politician is worse</Button>
                 </Grid>
             </Grid>
             <Outlet></Outlet>
