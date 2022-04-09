@@ -10,7 +10,7 @@ import pymongo
 mongo_client = pymongo.MongoClient(api_key.MONGO_STRING)
 database = mongo_client["Pondo2022Database"]
 politicians = database["Politicians"]
-
+tweets = database["Tweets"]
 
 @app.get('/')
 async def root():
@@ -20,7 +20,8 @@ async def root():
 @app.get('/politicians')
 async def politician_list():
     pol_list = list(
-        politicians.find({}, {
+        politicians.find({}, { # the first argument means that it will get everything from mongodb
+        # the second field is a "project" which indicates which fields we want to keep and what ones we dont want
             "first": 1,
             "last": 1,
             "_id": 0,
@@ -33,18 +34,13 @@ async def politician_list():
 
 @app.get('/random_politicians')
 async def politician_list():
-    random_politician = list(politicians.aggregate([{
+    random_politicians = list(politicians.aggregate([{ # aggregate lets us use the sample function in mongodb which gets random documents
+    #also doesnt get duplicates
         "$sample": {
-            "size": 1
+            "size": 2
         }
-    }]))[0] # you need this list and [0] bullshit cause mongodb aint giving us a dict
+    }])) # you need this list cause mongodb aint giving us a list, it gives us a generator, so dont touch this bit
 
-    random_politician2 = list(politicians.aggregate([{
-        "$sample": {
-            "size": 1
-        }
-    }]))[0] # you need this list and [0] bullshit cause mongodb aint giving us a dict
-
-    del random_politician["_id"]
-    del random_politician2["_id"]
-    return {"data": [random_politician, random_politician2]}
+    del random_politicians[0]["_id"]
+    del random_politicians[1]["_id"]
+    return {"data": random_politicians}
