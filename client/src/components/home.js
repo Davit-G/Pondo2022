@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Grid, Button } from '@mui/material';
+import { Grid, Button, Typography } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
 import Dan from "../assets/danandrews.jpeg"
@@ -17,6 +17,7 @@ function Home({ }) {
     return (
 
         <div>
+            <Typography pb={4} variant="h2" align="center">According to this, which parliament member is worse</Typography>
             {/*  So this container is a parent flexbox component that wraps everything */}
             <Grid container spacing={2} direction={"row"} justifyContent={"space-around"}>
                 {/* Each "grid item" element is like a child of the flexbox parent. xs just means share width equally */}
