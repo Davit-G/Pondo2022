@@ -41,12 +41,18 @@ def get_all_names():
     all_politicians = representatives + senators
     res = []
     for person in all_politicians:
+        # print(person.keys())
+
         twitter_handle = get_twitter_handle(f"{person['name']} twitter")
         house = get_details(person["person_id"])[0]
         roles = get_details(person["person_id"])[1]
 
         politician = {"person_id": person["person_id"], "twitter": twitter_handle, "first": person["first_name"], "last": person["last_name"], "party": person["party"], "house": house, "roles": roles}
+        
+        if "image" in person:
+            politician["oa_image"] = f"https://www.openaustralia.org.au{person['image']}"
         res.append(politician)
+
     return res
 
 def get_twitter_handle(query):
