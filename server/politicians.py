@@ -76,7 +76,7 @@ def get_details(id):
     else: 
         house = "Senate"
 
-    roles = "".join([role["position"] for role in req["offices"]])
+    roles = ", ".join([role["position"] for role in req["offices"]])
     return [house, roles]
 
 
