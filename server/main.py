@@ -33,6 +33,7 @@ database = mongo_client["Pondo2022Database"]
 politicians = database["Politicians"]
 tweets = database["Tweets"]
 parties = database["Parties"]
+policies = database["Policies"]
 
 @app.get('/politicians')
 async def politician_list():
@@ -45,7 +46,9 @@ async def politician_list():
             "party": 1,
             "person_id": 1,
             "count": 1,
-            "image": 1
+            "image": 1,
+            "house": 1,
+            "roles": 1
         }))
     return {"data": pol_list}
 
@@ -68,7 +71,28 @@ async def politician_list():
 async def get_parties():
     found_parties = list(parties.find({}))
     return found_parties
-    
+
+@app.get('/worstfromparties')
+async def get_parties():
+    worst_politicians = []
+    for party in parties.find({}):
+        worst_from_party = politicians.find({"party": party["name"]}).sort("count", -1)[0]
+        del worst_from_party["_id"]
+        worst_politicians.append( worst_from_party )
+    return {"data": worst_politicians}
+
+
+@app.get('/random_policy')
+async def random_policy():
+    random_policy2 = list(policies.aggregate([{ # aggregate lets us use the sample function in mongodb which gets random documents
+        "$sample": {
+            "size": 1
+        }
+    }]))
+
+    del random_policy2[0]["_id"]
+    return {"data": random_policy2}
+
 
 @app.post('/vote/')
 async def vote(usr_vote: Vote):

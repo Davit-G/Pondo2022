@@ -21,8 +21,7 @@ function Header({ }) {
                 <NavBarLink to="/">Home</NavBarLink>
                 <NavBarLink to="leaderboard">Leaderboards</NavBarLink>
                 <NavBarLink to="stats">Statistics</NavBarLink>
-                <NavBarLink to="login">Login</NavBarLink>
-                <NavBarLink to="?">?</NavBarLink>
+                <NavBarLink to="about">About</NavBarLink>
             </Grid>
 
         </div>
