@@ -9,6 +9,9 @@ import Header from './components/header';
 import Home from './components/home';
 import Leaderboard from './components/leaderboard';
 
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 function App() {
     return (
