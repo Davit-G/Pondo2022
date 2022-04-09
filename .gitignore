@@ -26,8 +26,4 @@ yarn-error.log*
 # vs code lol
 /client/.vscode
 /server/.vscode
-<<<<<<< HEAD
 .vscode
-=======
-.vscodes
->>>>>>> main
