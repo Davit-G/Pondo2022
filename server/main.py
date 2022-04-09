@@ -86,12 +86,10 @@ async def vote(usr_vote: Vote):
         return HTTPException(status_code=404, detail='a politician was not found')
     
     worse_politician = politicians.find_one({ 'person_id': better_id })
-    if 'count' in worse_politician:
-        politicians.update({'person_id': worse_id}, {'$set': { 'count': 1 }})
+    if 'count' not in worse_politician:
+        politicians.update_one({'_id': worse_politician['_id']}, {'$set': { 'count': 1 }})
     else:
-        politicians.update({'person_id': worse_id}, {'$set': { 'count': worse_politician['count'] + 1 }})
-
-    return []
+        politicians.update_one({'_id': worse_politician['_id']}, {'$set': { 'count': worse_politician['count'] + 1 }})
 
 
 # endpoint which gives all parties

@@ -1,4 +1,4 @@
 from pydantic import BaseModel
 class Vote(BaseModel):
-    worse_politician_id: int
-    better_politician_id: int
+    worse_politician_id: str
+    better_politician_id: str
