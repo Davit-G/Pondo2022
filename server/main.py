@@ -1,3 +1,4 @@
+import uvicorn
 from random import random
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
@@ -6,15 +7,14 @@ from fastapi.responses import HTMLResponse
 from models.models import Vote, Id
 from pathlib import Path
 
+
 app = FastAPI()
 
-
 origins = [
-    "http://103.1.185.148",
+    "https://cardsagainstau.com",
+    "http://cardsagainstau.com",
     "http://103.1.185.148:8000",
-    "http://localhost",
-    "http://localhost:3000",
-    "http://localhost:8000",
+    "http://103.1.185.148"
 ]
 
 app.add_middleware(
@@ -35,6 +35,9 @@ tweets = database["Tweets"]
 parties = database["Parties"]
 policies = database["Policies"]
 
+@app.get('/')
+def root():
+    return "someting"
 @app.get('/politicians')
 async def politician_list():
     pol_list = list(
@@ -181,3 +184,11 @@ async def vote(usr_vote: Vote):
 
 
 # endpoint which gives all parties
+if __name__ == '__main__':
+    uvicorn.run(
+        'main:app',
+        host='0.0.0.0',
+        port=8000,
+        # ssl_keyfile='./keys/privkey.pem',
+        # ssl_certfile='./keys/cert.pem'
+    )
