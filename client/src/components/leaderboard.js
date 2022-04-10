@@ -140,7 +140,7 @@ function Leaderboard({ backend_domain, query, small }) {
                             index={candidate.position}
                             party={candidate.party}
                             roles={candidate.roles}
-                            profImage={candidate.oa_image ? candidate.image : candidate.image}  //change back please
+                            profImage={candidate.oa_image ? candidate.oa_image : candidate.image}  //change back please
                             fName={candidate.first}
                             lName={candidate.last}
                             count={candidate.count}></LeaderboardRow>

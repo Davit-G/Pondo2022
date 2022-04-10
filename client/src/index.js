@@ -19,15 +19,36 @@ function ThemeWrapper({ }) {
     const theme = React.useMemo(
         () =>
             createTheme({
+                components: {
+
+                },
                 palette: {
                     mode: prefersDarkMode ? 'dark' : 'light',
-                    ...(!prefersDarkMode) ? {
-                        link: {
-                            primary: "white" 
+                    ...(!prefersDarkMode
+                        ? {
+                            // palette values for light mode
+                            // background: {
+                            //     default: "inear-gradient(to right, #00416a, #e4e5e6)"
+                            // },
+                            // divider: amber[200],
+                            
                         }
-                    } : {
-
-                    }
+                        : {
+                            // background: {
+                            //     default: "inear-gradient(to right, #00416a, #e4e5e6)"
+                            // },
+                            // palette values for dark mode
+                            // primary: "orange",
+                            // divider: deepOrange[700],
+                            // background: {
+                            //     default: deepOrange[900],
+                            //     paper: deepOrange[900],
+                            // },
+                            // text: {
+                            //     primary: '#fff',
+                            //     secondary: grey[500],
+                        // },
+                        }),
                 }
             }),
         [prefersDarkMode],
@@ -35,7 +56,7 @@ function ThemeWrapper({ }) {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <App />
+            <App theme={prefersDarkMode} />
         </ThemeProvider>
     );
 }

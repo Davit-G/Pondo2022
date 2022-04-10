@@ -80,8 +80,11 @@ function Home({ backend_domain }) {
 
     return (
         <div>
-            <Typography pb={3} variant="h5" align="center">Two parliamentary opinions on this policy:</Typography>
-            <Typography pb={3} variant="h4" align="center">{capitalize(policyData.policyName)}</Typography>
+            <Grid container justifyContent={"center"}>
+                <Grid item xs={8}>
+                <Typography mb={3} variant="h3" style={{ borderRadius: "20px", padding: "32px"}} align="center">{capitalize(policyData.policyName)}</Typography>
+                </Grid>
+            </Grid>
             <Typography pb={6} variant="h6" color={"gray"} align="center">{(policyData.policyDesc ? policyData.policyDesc[0].toUpperCase() + policyData.policyDesc.substr(1) + "." : "")}</Typography>
             {/*  So this container is a parent flexbox component that wraps everything */}
             <Grid container spacing={8} direction={"row"} justifyContent={"space-around"}>
@@ -89,6 +92,12 @@ function Home({ backend_domain }) {
                 {Card(showCard, [firstPol, secondPol], policyData, handleVote, handleContinue, 0)}
                 {Card(showCard, [firstPol, secondPol], policyData, handleVote, handleContinue, 1)}
             </Grid>
+            {
+                showCard ?
+                <Button style={{ marginTop: "12px", fontSize: "20px" }} onClick={() => { handleContinue(1); }} fullWidth variant="contained">Continue</Button>
+                : null
+            }
+            
             <Outlet></Outlet>
         </div>
     );
@@ -103,26 +112,24 @@ function Card(showCard, competitors, policyData, handleVote, handleContinue, ind
             {
             showCard ?
                 <>
-                    <Typography align={"center"} variant={"h2"}>{competitors[ind]["first"] + " " + competitors[ind]["last"]}</Typography>
+                    <Typography align={"center"}variant={"h4"}>{competitors[ind]["first"] + " " + competitors[ind]["last"] + " voted " + (competitors[ind].agreement < 50.0 ? "for" : "against") + "!"}</Typography>
                     <Typography pb={2} align={"center"} color={"gray"} variant={"h6"}>{competitors[ind]["party"]}</Typography>
+                    
                     <div style={{ backgroundColor: "black" }}>
                         <img style={{ borderRadius: "10px", width: "100%", height: "400px", objectFit: "cover" }} src={competitors[ind]["image"]} alt={"contender " + ind} />
                     </div>
                 </>
             : 
                 <>
-                    <div style={{borderRadius: "10px", height: "400px", backgroundColor: competitors[ind].agreement < 50.0 ? "#90EE90" : "#8A0303"}}>
-                        i voted {competitors[ind].agreement < 50.0 ? "for" : "against"}!
-                    </div>
-                    <Stack padding={4}>
-                        <Typography py={1} variant={"h5"}></Typography>
+                    <Stack justifyContent={"center"} style={{borderRadius: "10px", height: "400px", backgroundColor: competitors[ind].agreement < 50.0 ? "rgb(88 173 88)" : "rgb(179 73 73)"}}>
+                        <Typography color={"white"} variant={"h4"} align={"center"}>This politician voted {competitors[ind].agreement < 50.0 ? "for." : "against."}</Typography>
                     </Stack>
                 </>
             }
 
         </div>
         {!showCard ?
-            <Button style={{ marginTop: "12px" }} onClick={() => {handleVote(competitors[ind], competitors[ind ^ 1])}} fullWidth variant="contained">This politician is worse</Button>
-            : <Button style={{ marginTop: "12px" }} onClick={() => { handleContinue(1); }} fullWidth variant="contained">Continue</Button>}
+            <Button style={{ marginTop: "12px", fontSize: "20px" }} onClick={() => {handleVote(competitors[ind], competitors[ind ^ 1])}} fullWidth variant="contained">I think this politician's vote is worse</Button>
+            : null}
     </Grid>;
 }

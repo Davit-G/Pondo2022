@@ -6,10 +6,15 @@ import { Stack } from '@mui/material';
 import { Link, Outlet } from 'react-router-dom'; // the actual stateful thing used by react router
 import { Link as StyledLink } from "@mui/material" //the styling from MUI
 
-function NavBarLink({ to, children }) {
+function NavBarLink({ to, children, notRouted }) {
     return (
         <Grid marginX={4} marginY={2}>
-            <StyledLink component={Link} underline="hover" variant="h6" to={to}>{children}</StyledLink>
+            {
+                notRouted ?
+                <StyledLink underline="hover" variant="h6" href={to}>{children}</StyledLink>
+                    :
+                    <StyledLink component={Link} underline="hover" variant="h6" to={to}>{children}</StyledLink>
+            }
         </Grid>
     );
 }
@@ -19,9 +24,10 @@ function Header({ }) {
         <div style={{ padding: "4px" }}>
             <Grid container justifyContent={"center"} spacing={4}>
                 <NavBarLink to="/">Home</NavBarLink>
+                <NavBarLink to="game">Game</NavBarLink>
                 <NavBarLink to="leaderboard">Leaderboards</NavBarLink>
                 <NavBarLink to="stats">Statistics</NavBarLink>
-                <NavBarLink to="about">About</NavBarLink>
+                <NavBarLink notRouted to="https://devpost.com/software/cards-against-australia">About</NavBarLink>
             </Grid>
 
         </div>
