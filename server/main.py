@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
-from models.models import Vote
+from models.models import Vote, Id
 from pathlib import Path
 
 app = FastAPI()
@@ -48,7 +48,8 @@ async def politician_list():
             "count": 1,
             "image": 1,
             "house": 1,
-            "roles": 1
+            "roles": 1,
+            "oa_image": 1
         }))
     return {"data": pol_list}
 
@@ -99,6 +100,67 @@ async def random_policy():
     del random_policy2[0]["_id"]
     return {"data": random_policy2}
 
+
+
+@app.get('/get_all_policies')
+async def get_all_policies():
+    return list(policies.find({}, {"_id": 0, "policyName": 1, "id": 1}))
+
+
+
+@app.get('/parties_to_policy_broke/')  # SPAGHET CODE DONT TOUCH
+async def parties_for_policyBROKE(id: str):
+    print(id)
+    participants = list(policies.find( {"id": int(id)}, {"_id": 0, "participants": 1}))
+    partiesList = [{}]
+    #return participants
+    for participant in participants[0]["participants"]: # people in the policy request, it;s multiple people
+        for i, party in enumerate(partiesList):
+            found_pol = politicians.find_one({"person_id": participant["person_id"]},{"_id": 0, "party": 1})
+            if "party" in party:
+                if party["party"] is found_pol["party"]: # if we found the party that participant belongs to
+                    if participant["voted"]:
+                        partiesList[i]["numVotes"] += 1
+                        partiesList[i]["agreementSum"] += participant["agreement"]
+                        break
+                    else:
+                        break #dont do anything if voter didnt vote
+                else: 
+                    continue # go to other ppl bru
+            
+        else:
+            partiesList.append({
+                "numVotes": 0,
+                "agreementSum": 0,
+                "party": found_pol["party"]
+            })
+    return partiesList
+
+@app.get('/parties_to_policy/')
+async def parties_for_policy(id: str):
+    print(id)
+    participants = list(policies.find( {"id": int(id)}, {"_id": 0, "participants": 1}))
+
+
+
+    partiesList = {}
+    for party in parties.find({}, {"name": 1, "_id": 0}):
+        partiesList[party["name"]] = {
+            "numVotes":0,
+            "agreementSum":0,
+            "party": party["name"]
+        }
+
+    #return participants
+    for participant in participants[0]["participants"]: # people in the policy request, it;s multiple people
+        
+        found_pol = politicians.find_one({"person_id": participant["person_id"]},{"_id": 0, "party": 1})
+        if participant["voted"]:
+            partiesList[found_pol["party"]]["numVotes"] += 1
+            partiesList[found_pol["party"]]["agreementSum"] += float(participant["agreement"])
+    return partiesList
+
+    
 
 @app.post('/vote/')
 async def vote(usr_vote: Vote):
