@@ -66,6 +66,12 @@ async def politician_list():
     del random_politicians[1]["_id"]
     return {"data": random_politicians}
 
+@app.get('/politician/{person_id}')
+async def get_politician(person_id: str):
+    politician = politicians.find_one({ 'person_id': person_id })
+    del politician["_id"]
+    return politician
+
 
 @app.get('/parties')
 async def get_parties():

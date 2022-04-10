@@ -10,7 +10,7 @@ import Home from './components/home';
 import Leaderboard from './components/leaderboard';
 import Stats from './components/stats';
 
-const backend_domain = "http://127.0.0.1:8000"
+const backend_domain = "http://localhost:8000"
 
 function App() {
     return (
