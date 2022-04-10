@@ -7,21 +7,14 @@ import axios from 'axios';
 function StatsRow({ title, description, children, alternate }) {
     return (
         <>
-            <Stack justifyContent={"space-around"} marginY={3} padding={4} direction={"row"} style={{ borderStyle: "solid", borderRadius: "20px", borderWidth: "1px", padding: "16px", width: "100%", height: "auto" }}>
-                {
-                    alternate ? <div style={{ width: "40%" }}>
-                        {children}
-                    </div> : null
-                }
+            <Stack justifyContent={"space-around"} marginY={3} padding={4} direction={alternate ? "column" : "row"} style={{ borderStyle: "solid", borderRadius: "20px", borderWidth: "1px", padding: "16px", width: "100%", height: "auto" }}>
                 <Stack>
-                    <Typography padding={2} variant={"h4"} align={alternate ? "right" : "left"}>{title}</Typography>
-                    <Typography padding={2} variant={"h6"} align={alternate ? "right" : "left"}>{description}</Typography>
+                    <Typography padding={2} variant={"h4"} align={"left"}>{title}</Typography>
+                    <Typography padding={2} variant={"h6"} align={"left"}>{description}</Typography>
                 </Stack>
-                {
-                    !alternate ? <div style={{ width: "40%" }}>
-                        {children}
-                    </div> : null
-                }
+                <div style={{ height: alternate ? "800px" : "auto" }}>
+                    {children}
+                </div>
             </Stack>
         </>
     );
@@ -29,8 +22,8 @@ function StatsRow({ title, description, children, alternate }) {
 
 function PieChart({ data }) {
     return (<VictoryPie
-    data={data}
-        color={"white"}
+        data={data}
+        labelRadius={({ innerRadius }) => innerRadius + 60 + 90 * Math.random()}
         colorScale={[
             "#F44336",
             "#E91E63",
@@ -51,22 +44,39 @@ function PieChart({ data }) {
     ></VictoryPie>);
 }
 
-function FilterByPoliciesMenu({ backend_domain, parties_to_policy}) {
+function FilterByPoliciesMenu({ backend_domain, parties_to_policy, updatePieChart }) {
 
     const [listOfPolicies, updateListOfPolicies] = useState([])
-    
+    const [filterBy, updateFilterBy] = useState("22")
+
+
     useEffect(() => {
         axios.get(backend_domain + "/get_all_policies").then((res) => {
             updateListOfPolicies(res.data)
+            handleChange(filterBy, "")
         })
+        
     }, [])
 
-    const [filterBy, updateFilterBy] = useState("")
+    
 
-    function handleChange(value) {
+    function handleChange(value, bruh) {
         updateFilterBy(value)
-        axios.get(backend_domain + "/parties_to_policy").then((res) => {
+        updatePieChart([{ "x": "Calculating Response...", "y": 100 }])
+        axios.get(backend_domain + "/parties_to_policy?id=" + value).then((res) => {
             console.log(res.data)
+            let pieData = []
+            for (var key in res.data) {
+                let onePartyData = res.data[key]
+                let agreementSum = onePartyData.agreementSum
+                let numVotes = onePartyData.numVotes
+                if (numVotes > 0) {
+                    if (agreementSum > 10) {
+                        pieData.push({ "x": key, "y": agreementSum })
+                    }
+                }
+            }
+            updatePieChart(pieData)
         })
     }
 
@@ -82,10 +92,10 @@ function FilterByPoliciesMenu({ backend_domain, parties_to_policy}) {
                         labelId="demo"
                         value={filterBy}
                         label="View"
-                        onChange={(event) => handleChange(event.target.value)}
+                        onChange={(event) => handleChange(event.target.value, event.target.desc)}
                     >
                         {listOfPolicies.map((policy) => {
-                            return <MenuItem value={policy.policyName}>{policy.policyName}</MenuItem>
+                            return <MenuItem desc={policy.policyDesc} value={policy.id}>{policy.policyName}</MenuItem>
                         })}
                     </Select>
                 </FormControl>
@@ -104,7 +114,7 @@ function Stats({ backend_domain }) {
     // useEffect(() => {
     //     axios.get(backend_domain + "/get_all_policies").then((res) => {
     //         updateListOfPolicies(res.data)
-            
+
     //     })
     // }, [])
 
@@ -119,9 +129,13 @@ function Stats({ backend_domain }) {
 
             <Stack>
                 <StatsRow title={"Worst Politicians By Party"} description={"Sorted by count"}><Leaderboard small backend_domain={backend_domain} query={"/worstfromparties"}></Leaderboard></StatsRow>
-                <StatsRow title={"Distribution of Votes Against Parties"} description={"Dope Pie Chart Bro!"} alternate><PieChart ></PieChart><FilterByPoliciesMenu backend_domain={backend_domain}></FilterByPoliciesMenu></StatsRow>
+                <StatsRow title={"Distribution of Votes Against Parties"} description={""} alternate>
+                    <FilterByPoliciesMenu updatePieChart={(data) => updatePieChart(data)} backend_domain={backend_domain}>
+                    </FilterByPoliciesMenu>
+                    <PieChart data={dataForPieChart}></PieChart>
+                </StatsRow>
 
-                
+
             </Stack>
         </>
     );

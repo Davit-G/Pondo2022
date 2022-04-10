@@ -104,7 +104,7 @@ async def random_policy():
 
 @app.get('/get_all_policies')
 async def get_all_policies():
-    return list(policies.find({}, {"_id": 0, "policyName": 1, "id": 1}))
+    return list(policies.find({}, {"_id": 0, "policyName": 1, "id": 1, "policyDesc": 1}))
 
 
 

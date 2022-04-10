@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+tspan {
+  fill:white !important;
+  color: white !important;
+  stroke: black !important;
+  stroke-width: 0.2px !important;
+  background-color: black !important;
+  border-radius: 20px !important;
+}
