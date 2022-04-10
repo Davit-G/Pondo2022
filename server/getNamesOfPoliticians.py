@@ -12,8 +12,6 @@ database = mongo_client["Pondo2022Database"]
 politicians = database["Politicians"]
 
 
-
-
 def get_all_names():
     """ gets a list of all politicians
     

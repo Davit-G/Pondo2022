@@ -79,7 +79,7 @@ function Card(showCard, competitors, policyData, handleVote, handleContinue, ind
             {showCard ?
                 <>
                     <Typography align={"center"} variant={"h2"}>{competitors[ind]["first"] + " " + competitors[ind]["last"]}</Typography>
-                    <Typography pb={2} align={"center"} color={"gray"} variant={"h6"}>{(competitors[ind]["roles"] === "" ? "" : competitors[ind]["roles"] + " in the ") + competitors[ind]["party"]}</Typography>
+                    <Typography pb={2} align={"center"} color={"gray"} variant={"h6"}>{competitors[ind]["party"]}</Typography>
                     <div style={{ backgroundColor: "black" }}>
                         <img style={{ borderRadius: "10px", width: "100%", height: "400px", objectFit: "cover" }} src={competitors[ind]["image"]} alt={"contender " + ind} />
                     </div>

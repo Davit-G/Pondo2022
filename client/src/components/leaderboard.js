@@ -81,7 +81,7 @@ function Leaderboard({ backend_domain, query, small }) {
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     value={filterBy}
-                                    label="Age"
+                                    label="Sort Category"
                                     onChange={(event) => updateFilterBy(String(event.target.value))}
                                 >
                                     <MenuItem value={"count"}>Count</MenuItem>
@@ -140,7 +140,7 @@ function Leaderboard({ backend_domain, query, small }) {
                             index={candidate.position}
                             party={candidate.party}
                             roles={candidate.roles}
-                            profImage={candidate.image}
+                            profImage={candidate.oa_image ? candidate.image : candidate.image}  //change back please
                             fName={candidate.first}
                             lName={candidate.last}
                             count={candidate.count}></LeaderboardRow>

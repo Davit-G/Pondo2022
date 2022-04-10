@@ -1,0 +1,17 @@
+Done.
+
+Done??
+- Fix weird profile pictures of politicians
+
+TODO:
+- game modes, one where it does the thing right now and another where you guess whether a politician agreed with a particular statement or not. doesnt count towards the score, we will figure it out later
+- Fill out 'vote yes or no' this person voted for etc etc on the main screen
+- statistics page, fill out the pie chart with each party vote on each topic
+- heat map????? electorate bruh
+- about page
+- devpost blog thing
+- deploy to vps, buy domain
+- come up with name LOL
+- sleep lmao
+- make text on buttons bigger to make it more readable
+- names are a bit too big

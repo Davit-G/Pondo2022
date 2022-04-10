@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
-from models.models import Vote
+from models.models import Vote, Id
 from pathlib import Path
 
 app = FastAPI()
@@ -48,7 +48,8 @@ async def politician_list():
             "count": 1,
             "image": 1,
             "house": 1,
-            "roles": 1
+            "roles": 1,
+            "oa_image": 1
         }))
     return {"data": pol_list}
 
@@ -93,6 +94,25 @@ async def random_policy():
     del random_policy2[0]["_id"]
     return {"data": random_policy2}
 
+
+
+@app.get('/get_all_policies')
+async def get_all_policies():
+    return list(policies.find({}, {"_id": 0, "policyName": 1, "id": 1}))
+
+
+
+@app.get('/parties_to_policy/')
+async def parties_for_policy(id: str):
+    participants = policies.find({"id": id}, {"_id": 0, "participants": 1})
+    partiesList = parties.find({}, {"_id": 0, "name": 1})
+    for policy_participants in participants:
+        for participant in policy_participants:
+            pass
+    print(partiesList)
+    pass
+        
+    
 
 @app.post('/vote/')
 async def vote(usr_vote: Vote):
